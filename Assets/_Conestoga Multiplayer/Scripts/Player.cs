@@ -1,8 +1,8 @@
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
-namespace ConestogaMultiplayer {
+namespace ConestogaMultiplayer
+{
     public class Player : NetworkBehaviour
     {
         [SerializeField] Transform head, leftHand, rightHand;
