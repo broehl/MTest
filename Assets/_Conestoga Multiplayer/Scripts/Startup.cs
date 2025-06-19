@@ -4,11 +4,9 @@
 
 using System;
 using System.Collections;
-using System.Net;
 using NetworkDiscoveryUnity;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-using Unity.Networking.Transport;
 using UnityEngine;
 
 namespace ConestogaMultiplayer
@@ -68,12 +66,8 @@ namespace ConestogaMultiplayer
         private void FoundServer(NetworkDiscovery.DiscoveryInfo info)
         {
             gotServer = true;  // we marry the first person who proposes to us
-            ushort port = ushort.Parse(info.KeyValuePairs[NetworkDiscovery.kPortKey]);
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.SetConnectionData(info.EndPoint.Address.ToString(), port);
-            NetworkManager.Singleton.StartClient();
-            // can also make this whole class a singleton, and set values based on info.KeyValuePairs
-            // (e.g. scene to load, spawn point, etc)
+            transport.SetConnectionData(info.EndPoint.Address.ToString(), info.GetGameServerPort());
         }
     }
 }
