@@ -66,6 +66,7 @@ namespace ConestogaMultiplayer
         private void FoundServer(NetworkDiscovery.DiscoveryInfo info)
         {
             gotServer = true;  // we marry the first person who proposes to us
+            print($"Setting connection data... address {info.EndPoint.Address.ToString()}, port: {info.GetGameServerPort()}");
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData(info.EndPoint.Address.ToString(), info.GetGameServerPort());
         }
