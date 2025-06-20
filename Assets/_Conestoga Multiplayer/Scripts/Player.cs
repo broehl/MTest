@@ -11,11 +11,11 @@ namespace ConestogaMultiplayer
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (!isOwner) return;
+            if (!IsOwner) return;
             GameObject[] spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
             if (spawnpoints.Length > 0)
             {
-                Transform spawnpoint = spawnpoints[(int) OwnerClientId) % spawnpoints.Length];
+                Transform spawnpoint = spawnpoints[((int) OwnerClientId) % spawnpoints.Length].transform;
                 GameObject.FindObjectOfType<XROrigin>().transform.SetPositionAndRotation(spawnpoint.position, spawnpoint.rotation);
             }
         }
