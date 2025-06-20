@@ -72,6 +72,7 @@ namespace ConestogaMultiplayer
             print($"Setting connection data... address {info.EndPoint.Address.ToString()}, port: {info.GetGameServerPort()}");
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData(info.EndPoint.Address.ToString(), info.GetGameServerPort());
+            NetworkManager.Singleton.StartClient();
         }
     }
 }
