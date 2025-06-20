@@ -18,6 +18,9 @@ namespace ConestogaMultiplayer
 
         bool gotServer = false;
 
+        NetworkDiscovery discovery;
+        private void Awake() => discovery = GetComponent<NetworkDiscovery>();
+
         void Start()
         {
             // If we're running as an executable and specify a mode on the command line,
@@ -37,11 +40,11 @@ namespace ConestogaMultiplayer
             switch (mode)
             {
                 case Mode.SERVER:
-                    NetworkDiscovery.Instance.EnsureServerIsInitialized();
+                    discovery.EnsureServerIsInitialized();
                     NetworkManager.Singleton.StartServer();
                     break;
                 case Mode.HOST:
-                    NetworkDiscovery.Instance.EnsureServerIsInitialized();
+                    discovery.EnsureServerIsInitialized();
                     NetworkManager.Singleton.StartHost();
                     break;
                 case Mode.CLIENT:
@@ -55,13 +58,13 @@ namespace ConestogaMultiplayer
             WaitForSeconds delay = new WaitForSeconds(1);
             while (!gotServer)
             {
-                NetworkDiscovery.Instance.SendBroadcast();
+                discovery.SendBroadcast();
                 yield return delay;
             }
         }
 
-        void OnEnable() => NetworkDiscovery.Instance.onReceivedServerResponse.AddListener(FoundServer);
-        void OnDisable() => NetworkDiscovery.Instance.onReceivedServerResponse.RemoveListener(FoundServer);
+        void OnEnable() => discovery.onReceivedServerResponse.AddListener(FoundServer);
+        void OnDisable() => discovery.onReceivedServerResponse.RemoveListener(FoundServer);
 
         private void FoundServer(NetworkDiscovery.DiscoveryInfo info)
         {
