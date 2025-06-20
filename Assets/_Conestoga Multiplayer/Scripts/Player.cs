@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 namespace ConestogaMultiplayer
@@ -6,6 +7,18 @@ namespace ConestogaMultiplayer
     public class Player : NetworkBehaviour
     {
         [SerializeField] Transform head, leftHand, rightHand;
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            if (!isOwner) return;
+            GameObject[] spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
+            if (spawnpoints.Length > 0)
+            {
+                Transform spawnpoint = spawnpoints[(int) OwnerClientId) % spawnpoints.Length];
+                GameObject.FindObjectOfType<XROrigin>().transform.SetPositionAndRotation(spawnpoint.position, spawnpoint.rotation);
+            }
+        }
 
         private void LateUpdate()
         {
