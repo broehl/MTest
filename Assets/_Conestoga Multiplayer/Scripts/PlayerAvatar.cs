@@ -56,18 +56,13 @@ namespace ConestogaMultiplayer
 
         void LateUpdate()
         {
-            if (playerAvatar)
-            {
-                playerAvatar.transform.position = refs.headIK_target.position - networkedPlayerHeight.Value * Vector3.up;
-                Quaternion destinationRotation = Quaternion.Euler(playerAvatar.transform.eulerAngles.x, refs.headIK_target.eulerAngles.y, playerAvatar.transform.eulerAngles.z);
-                playerAvatar.transform.rotation = Quaternion.Lerp(playerAvatar.transform.rotation, destinationRotation, bodyAlignmentRate);
-            }
-            if (refs)
-            {
-                refs.headIK_target.SetPositionAndRotation(headAnchor.position, headAnchor.rotation);
-                refs.leftArmIK_target.SetPositionAndRotation(leftHandAnchor.position, leftHandAnchor.rotation);
-                refs.rightArmIK_target.SetPositionAndRotation(rightHandAnchor.position, rightHandAnchor.rotation);
-            }
+            if (playerAvatar == null || refs == null) return;
+            playerAvatar.transform.position = refs.headIK_target.position - networkedPlayerHeight.Value * Vector3.up;
+            Quaternion destinationRotation = Quaternion.Euler(playerAvatar.transform.eulerAngles.x, refs.headIK_target.eulerAngles.y, playerAvatar.transform.eulerAngles.z);
+            playerAvatar.transform.rotation = Quaternion.Lerp(playerAvatar.transform.rotation, destinationRotation, bodyAlignmentRate);
+            refs.headIK_target.SetPositionAndRotation(headAnchor.position, headAnchor.rotation);
+            refs.leftArmIK_target.SetPositionAndRotation(leftHandAnchor.position, leftHandAnchor.rotation);
+            refs.rightArmIK_target.SetPositionAndRotation(rightHandAnchor.position, rightHandAnchor.rotation);
             // resize player when spacebar is pressed
             if (IsOwner && playerAvatar && Input.GetKeyDown(KeyCode.Space)) SetPlayerHeight();
         }
