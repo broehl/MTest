@@ -16,9 +16,9 @@ namespace ConestogaMultiplayer
         private Transform cameraTransform;
         private Transform nameTagTransform;
 
-        NetworkVariable<FixedString32Bytes> networkedNameTag = new NetworkVariable<FixedString32Bytes>();
+        NetworkVariable<FixedString32Bytes> networkedNameTag = new NetworkVariable<FixedString32Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner)
 
-        private void Awake()
+ ;       private void Awake()
         {
             cameraTransform = Camera.main.transform;
             nameTagTransform = nameTagText.GetComponentInParent<Canvas>().transform;
@@ -35,19 +35,14 @@ namespace ConestogaMultiplayer
         {
             base.OnNetworkSpawn();
             networkedNameTag.OnValueChanged += UpdateNametag;
-            if (IsOwner) ServerSetNameRPC(System.Environment.MachineName);
+            if (IsOwner) networkedNameTag.Value = System.Environment.MachineName;
             else UpdateNametag("", networkedNameTag.Value);
-        }
-
-        [Rpc(SendTo.Server)]
-        void ServerSetNameRPC(FixedString32Bytes name)
-        {
-            networkedNameTag.Value = name;
         }
 
         private void UpdateNametag(FixedString32Bytes oldname, FixedString32Bytes newname)
         {
             nameTagText.text = networkedNameTag.Value.ToString();
+            this.name = newname.Value;
         }
 
     }

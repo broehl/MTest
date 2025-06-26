@@ -21,7 +21,7 @@ namespace ConestogaMultiplayer
         AvatarReferences refs;
 
         // these variables are used to scale the avatar to match the player
-        NetworkVariable<float> networkedPlayerHeight = new NetworkVariable<float>();
+        NetworkVariable<float> networkedPlayerHeight = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         float avatarHeight;  // this gets set when the avatar is first loaded
 
         public override void OnNetworkSpawn()
@@ -49,9 +49,10 @@ namespace ConestogaMultiplayer
             return avatarRoot;
         }
 
-        void SetPlayerHeight() => ServerSetPlayerHeightRPC(TrackerReferences.instance.headTracker.position.y);
-        [Rpc(SendTo.Server)] void ServerSetPlayerHeightRPC(float height) => networkedPlayerHeight.Value = height;
+        void SetPlayerHeight() => networkedPlayerHeight.Value = TrackerReferences.instance.headTracker.position.y;
+
         void OnUpdatePlayerHeight(float oldheight, float newheight) => ResizeAvatar();
+
         void ResizeAvatar() => playerAvatar.transform.localScale = (networkedPlayerHeight.Value / avatarHeight) * Vector3.one;
 
         void LateUpdate()

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6626394394018300530}
   - component: {fileID: -648939905493230900}
   - component: {fileID: 8594064441157784386}
+  - component: {fileID: 6428376700625056253}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -86,6 +87,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameTagText: {fileID: 2999339536883710085}
+--- !u!114 &6428376700625056253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164963217232280982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17af003f5081a964bb9f80d66adba2f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatarPrefabs:
+  - {fileID: 456626067026466453, guid: dba52393d3d3f8a409f146b3f841806a, type: 3}
+  - {fileID: 9101449885089554463, guid: a5508719e9545174f9c2d073cc85d36f, type: 3}
+  - {fileID: 590044378525192921, guid: 64beebd572f3660479870fdddff76366, type: 3}
+  - {fileID: 8853545430466545409, guid: 5e9dc443d6de63f4286b0c5e35f2266c, type: 3}
+  headAnchor: {fileID: 7576931914107923301}
+  leftHandAnchor: {fileID: 6698994112094253633}
+  rightHandAnchor: {fileID: 1624342963870010458}
+  behead: 0
+  bodyAlignmentRate: 0.01
+  playerAvatarChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1562915096743750390
 GameObject:
   m_ObjectHideFlags: 0
