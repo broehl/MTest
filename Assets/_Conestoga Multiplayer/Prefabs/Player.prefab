@@ -100,9 +100,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   avatarPrefabs:
-  - {fileID: 456626067026466453, guid: dba52393d3d3f8a409f146b3f841806a, type: 3}
   - {fileID: 9101449885089554463, guid: a5508719e9545174f9c2d073cc85d36f, type: 3}
   - {fileID: 590044378525192921, guid: 64beebd572f3660479870fdddff76366, type: 3}
+  - {fileID: 456626067026466453, guid: dba52393d3d3f8a409f146b3f841806a, type: 3}
   - {fileID: 8853545430466545409, guid: 5e9dc443d6de63f4286b0c5e35f2266c, type: 3}
   headAnchor: {fileID: 7576931914107923301}
   leftHandAnchor: {fileID: 6698994112094253633}
@@ -650,7 +650,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Bernie Roehl
+  m_text: Placeholder name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -677,7 +677,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.5
+  m_fontSize: 24.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
