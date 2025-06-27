@@ -36,6 +36,7 @@ namespace ConestogaMultiplayer
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
+            networkedPlayerHeight.OnValueChanged -= OnUpdatePlayerHeight;
             Destroy(playerAvatar);
         }
 
