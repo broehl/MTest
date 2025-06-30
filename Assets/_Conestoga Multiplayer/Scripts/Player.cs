@@ -1,3 +1,9 @@
+// The netcode Player script
+
+// Written by Bernie Roehl, June 2025
+
+// Updates the pose of our body parts based on controller inputs
+
 using Unity.Netcode;
 using Unity.XR.CoreUtils;
 using UnityEngine;

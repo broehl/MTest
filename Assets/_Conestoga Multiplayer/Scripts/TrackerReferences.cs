@@ -1,3 +1,7 @@
+// Keep references to the trackers and XR Origin
+
+// Written by Bernie Roehl, June 2025
+
 using UnityEngine;
 
 namespace ConestogaMultiplayer
