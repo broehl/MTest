@@ -1,3 +1,7 @@
+// The balloon-popping logic
+
+// Written by Bernie Roehl, June 2025
+
 using Unity.Netcode;
 using UnityEngine;
 
