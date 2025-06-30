@@ -19,5 +19,9 @@ public class LightController : NetworkBehaviour
     void UpdateLightState(bool _, bool newvalue) => lightSource.enabled = newvalue;
 
     [Rpc(SendTo.Server)]
-    public void ToggleRpc() => lightState.Value = !lightState.Value;
+    public void ToggleRpc()
+    {
+        lightState.Value = !lightState.Value;
+        print("Toggle");
+    }
 }
