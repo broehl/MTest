@@ -6,7 +6,7 @@ using UnityEngine.XR.Content.Interaction;
 
 namespace ConestogaMultiplayer
 {
-    public class BalloonLever : NetworkBehaviour
+    public class BalloonSlider : NetworkBehaviour
     {
         XRSlider slider;
         private void Awake() => slider = GetComponent<XRSlider>();
@@ -15,6 +15,5 @@ namespace ConestogaMultiplayer
         {
             if (IsOwner) InteractionsGameLogic.instance.SetBalloonHeightRpc(slider.value);
         }
-
     }
 }
