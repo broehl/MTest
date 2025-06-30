@@ -11,22 +11,35 @@ namespace ConestogaMultiplayer
     {
         NetworkObject networkObject;
 
-        private void Awake()
+        public override void OnNetworkSpawn()
         {
+            base.OnNetworkSpawn();
             networkObject = GetComponent<NetworkObject>();
             IXRSelectInteractable interactable = GetComponent<IXRSelectInteractable>();
             interactable.selectEntered.AddListener(OnSelect);
             interactable.selectExited.AddListener(OnDeselect);
         }
 
-        private void OnSelect(SelectEnterEventArgs _)
+        private void OnSelect(SelectEnterEventArgs args)
         {
-            if (IsClient && !IsOwner) RequestOwnershipRpc(NetworkManager.Singleton.LocalClientId);
+            if (!(args.interactorObject is XRDirectInteractor || args.interactorObject is XRRayInteractor)) return;
+            print("Select");
+            if (IsClient && !IsOwner)
+            {
+                print("Change ownership");
+                RequestOwnershipRpc(NetworkManager.Singleton.LocalClientId);
+            }
         }
 
-        public void OnDeselect(SelectExitEventArgs _)
+        public void OnDeselect(SelectExitEventArgs args) 
         {
-            if (IsOwner) ReleaseOwnershipRpc();
+            if (!(args.interactorObject is XRDirectInteractor || args.interactorObject is XRRayInteractor)) return;
+            print("Deselect");
+            if (IsOwner)
+            {
+                ReleaseOwnershipRpc();
+                print("Release ownership");
+            }
         }
 
         [Rpc(SendTo.Server)]
