@@ -14,7 +14,7 @@ namespace ConestogaMultiplayer
         private void Awake()
         {
             networkObject = GetComponent<NetworkObject>();
-            XRGrabInteractable interactable = GetComponent<XRGrabInteractable>();
+            IXRSelectInteractable interactable = GetComponent<IXRSelectInteractable>();
             interactable.selectEntered.AddListener(OnSelect);
             interactable.selectExited.AddListener(OnDeselect);
         }
