@@ -42,16 +42,10 @@ namespace ConestogaMultiplayer
             if (balloon.transform.position.y >= balloonMaxHeight && !popped)
             {
                 popped = true;
-                PopBalloonRpc();
+                balloon.GetComponent<Balloon>().PopRpc();
             }
         }
 
-        [Rpc(SendTo.Everyone)]
-        void PopBalloonRpc()
-        {
-            balloon.GetComponent<Renderer>().enabled = false;
-            balloon.GetComponent<ParticleSystem>()?.Play();
-            balloon.GetComponent<AudioSource>()?.Play();
-        }
+
     }
 }

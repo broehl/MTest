@@ -451,7 +451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30880519c9ddcaa40985b69839856ebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 2
+  mode: 0
 --- !u!114 &268871064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -981,18 +981,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &809436414 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8698818838098262314, guid: d69d1b462f51a2c4a8358ce041c996a7,
-    type: 3}
-  m_PrefabInstance: {fileID: 809436411}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 809436412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d494b658b37958449db82c0ee015fbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &809436415 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3624182616336594352, guid: d69d1b462f51a2c4a8358ce041c996a7,
@@ -1291,7 +1279,6 @@ MonoBehaviour:
   balloonPrefab: {fileID: 2797131668230290487, guid: 00f4645bead88354980e3e2379bf76c8,
     type: 3}
   balloonLaunchPoint: {fileID: 1711297087}
-  slider: {fileID: 809436414}
   balloonMaxHeight: 3
 --- !u!4 &1402375926
 Transform:
