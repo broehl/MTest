@@ -215,7 +215,7 @@ PrefabInstance:
     - target: {fileID: 5419331889293473514, guid: 76f3439a0ae796e4b81bee3f91f888ee,
         type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Toggle
+      value: ToggleRpc
       objectReference: {fileID: 0}
     - target: {fileID: 5419331889293473514, guid: 76f3439a0ae796e4b81bee3f91f888ee,
         type: 3}
@@ -249,8 +249,8 @@ GameObject:
   - component: {fileID: 226114551}
   - component: {fileID: 226114550}
   - component: {fileID: 226114549}
-  - component: {fileID: 226114552}
   - component: {fileID: 226114553}
+  - component: {fileID: 226114552}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 268871062}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30880519c9ddcaa40985b69839856ebb, type: 3}
   m_Name: 

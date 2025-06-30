@@ -27,6 +27,8 @@ namespace ConestogaMultiplayer
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            if (!enabled) return;
+            if (avatarPrefabs.Length == 0) return;
             playerAvatar = LoadAvatar(avatarPrefabs[((int)OwnerClientId) % avatarPrefabs.Length]);
             networkedPlayerHeight.OnValueChanged += OnUpdatePlayerHeight;
             if (IsOwner) SetPlayerHeight();
@@ -36,6 +38,7 @@ namespace ConestogaMultiplayer
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
+            if (!enabled) return;
             networkedPlayerHeight.OnValueChanged -= OnUpdatePlayerHeight;
             Destroy(playerAvatar);
         }
