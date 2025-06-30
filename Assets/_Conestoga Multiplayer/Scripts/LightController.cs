@@ -13,15 +13,10 @@ public class LightController : NetworkBehaviour
         lightSource = GetComponent<Light>();
         lightState.OnValueChanged += UpdateLightState;
         if (IsOwner) lightState.Value = lightSource.enabled;
-        print("Hello");
     }
 
     void UpdateLightState(bool _, bool newvalue) => lightSource.enabled = newvalue;
 
     [Rpc(SendTo.Server)]
-    public void ToggleRpc()
-    {
-        lightState.Value = !lightState.Value;
-        print("Toggle");
-    }
+    public void ToggleRpc() => lightState.Value = !lightState.Value;
 }
