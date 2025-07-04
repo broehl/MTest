@@ -36,6 +36,9 @@ namespace ConestogaMultiplayer
                 }
             }
 
+#if UNITY_EDITOR
+            if (ParrelSync.ClonesManager.IsClone()) mode = Mode.HOST;
+#endif
             // Start in the appropriate mode
             switch (mode)
             {

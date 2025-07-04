@@ -5,7 +5,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ConestogaMultiplayer
+namespace ConestogaMultiplayerBalloonDemo
 {
     public class Balloon : NetworkBehaviour
     {

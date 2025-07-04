@@ -5,9 +5,9 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace ConestogaMultiplayer
+namespace ConestogaMultiplayerBalloonDemo
 {
-    public class InteractionsGameLogic : NetworkBehaviour
+    public class BalloonGameLogic : NetworkBehaviour
     {
         [SerializeField] private GameObject balloonPrefab;
         [SerializeField] private Transform balloonLaunchPoint;
@@ -16,7 +16,7 @@ namespace ConestogaMultiplayer
         GameObject balloon;
         bool popped = false;
 
-        public static InteractionsGameLogic instance;
+        public static BalloonGameLogic instance;
         private void Awake() => instance = this;
 
         [Rpc(SendTo.Server)]
@@ -37,8 +37,7 @@ namespace ConestogaMultiplayer
         private void Update()
         {
             if (!IsServer) return;
-            if (balloon == null) return;
-            if (balloon.transform.position.y >= balloonMaxHeight && !popped)
+            if (balloon && !popped && balloon.transform.position.y >= balloonMaxHeight)
             {
                 popped = true;
                 balloon.GetComponent<Balloon>().PopRpc();

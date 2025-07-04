@@ -1,10 +1,11 @@
 // Set the balloon's height (on the server) based on the slider position
 
 // Written by Bernie Roehl, June 2025
+
 using Unity.Netcode;
 using UnityEngine.XR.Content.Interaction;
 
-namespace ConestogaMultiplayer
+namespace ConestogaMultiplayerBalloonDemo
 {
     public class BalloonSlider : NetworkBehaviour
     {
@@ -13,7 +14,7 @@ namespace ConestogaMultiplayer
 
         private void Update()
         {
-            if (IsOwner) InteractionsGameLogic.instance.SetBalloonHeightRpc(slider.value);
+            if (IsOwner) BalloonGameLogic.instance.SetBalloonHeightRpc(slider.value);
         }
     }
 }

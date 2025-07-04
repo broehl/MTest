@@ -23,6 +23,7 @@ namespace ConestogaMultiplayer
             {
                 Transform spawnpoint = spawnpoints[((int) OwnerClientId) % spawnpoints.Length].transform;
                 GameObject.FindObjectOfType<XROrigin>().transform.SetPositionAndRotation(spawnpoint.position, spawnpoint.rotation);
+                print($"Spawned at {spawnpoint.position}");
             }
         }
 
