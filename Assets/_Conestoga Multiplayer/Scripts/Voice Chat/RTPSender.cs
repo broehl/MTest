@@ -35,7 +35,9 @@ namespace ConestogaMultiplayer
         {
             base.OnNetworkSpawn();
             if (!IsOwner) return;
-            remoteEndPoint = new IPEndPoint(IPAddress.Broadcast, basePort + (ushort) OwnerClientId);
+            int myBroadcastPort = basePort + (ushort)NetworkManager.Singleton.LocalClientId;
+            print($"Broadcasting audio on port {myBroadcastPort}");
+            remoteEndPoint = new IPEndPoint(IPAddress.Broadcast, myBroadcastPort);
             audioClip = Microphone.Start(microphoneDevice, true, 1, 44100);  // needs to be 44100 for RTP payload type 11
             if (audioClip == null)
             {

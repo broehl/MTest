@@ -37,7 +37,9 @@ namespace ConestogaMultiplayer
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            udpClient = new UdpClient(basePort + (ushort)OwnerClientId);
+            int myReceivePort = basePort + (ushort)OwnerClientId;
+            udpClient = new UdpClient(myReceivePort);
+            print($"Receiving audio on port {myReceivePort}");
             audioSource = GetComponent<AudioSource>();
             int clipSize = 44100 * 2 * 3;  // 44.1 khz, times 2 channels, times number of seconds to buffer
             audioClip = AudioClip.Create("Received", clipSize, 2, 44100, false);
