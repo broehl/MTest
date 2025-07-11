@@ -25,8 +25,8 @@ namespace ConestogaMultiplayer
         UInt16 sequenceNumber = 0;
         UInt32 timestamp = 0;
 
-        Socket udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        IPEndPoint remoteEndPoint;   // target we're sending to
+        UdpClient udpClient;
+        int myBroadcastPort;
 
         const int RTP_HEADER_LEN = 12;
         const int MAX_DATA_PER_PACKET = 1400;   // ethernet MTU is 1500, but we need to allow for headers (UDP=8 bytes, IP=40 bytes or more)
@@ -35,9 +35,8 @@ namespace ConestogaMultiplayer
         {
             base.OnNetworkSpawn();
             if (!IsOwner) return;
-            int myBroadcastPort = basePort + (ushort)NetworkManager.Singleton.LocalClientId;
+            myBroadcastPort = basePort + (ushort)NetworkManager.Singleton.LocalClientId;
             print($"Broadcasting audio on port {myBroadcastPort}");
-            remoteEndPoint = new IPEndPoint(IPAddress.Broadcast, myBroadcastPort);
             audioClip = Microphone.Start(microphoneDevice, true, 1, 44100);  // needs to be 44100 for RTP payload type 11
             if (audioClip == null)
             {
@@ -66,7 +65,7 @@ namespace ConestogaMultiplayer
 
         void Send(float[] samples)
         {
-            if (udpSocket == null) return;
+            if (udpClient == null) return;
             if (samples == null || samples.Length == 0) return;
 
             // convert samples from floats (range -1 to +1) to signed 16-bit ints
@@ -93,7 +92,8 @@ namespace ConestogaMultiplayer
                 Write16(packetBuffer, 8, 0);    // SSRC
                 Write16(packetBuffer, 10, 0);   // SSRC
                 Array.Copy(audioBuffer, offset, packetBuffer, RTP_HEADER_LEN, bodyLen);
-                int dataSent = udpSocket.SendTo(packetBuffer, 0, packetBuffer.Length, SocketFlags.None, remoteEndPoint);
+                int dataSent = udpClient.Send(packetBuffer, packetBuffer.Length, "255.255.255.255", myBroadcastPort);
+                //int dataSent = udpSocket.SendTo(packetBuffer, 0, packetBuffer.Length, SocketFlags.None, remoteEndPoint);
                 dataLeftToSend -= dataSent;
                 offset += dataSent;
             }
