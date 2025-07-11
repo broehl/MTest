@@ -1,0 +1,105 @@
+// Receive audio data over RTP and play it back
+
+// Written by Bernie Roehl, July 2025
+
+using System;
+using System.Net;
+using System.Net.Sockets;
+using Unity.Netcode;
+using UnityEngine;
+
+namespace ConestogaMultiplayer
+{
+    public class RTPReceiver : NetworkBehaviour
+    {
+        [SerializeField] int basePort = 6000;
+        [SerializeField] float startThreshold = 4000;  // number of samples to accumulate before starting
+
+        UdpClient udpClient;
+        IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
+        const int RTP_HEADER_LEN = 12;
+        const UInt16 TOP_BIT_16 = 1 << 15;   // we check the top bit to determine when the sequence number has wrapped around
+
+        UInt16 lastSequenceNumber = 0;       // we use this for detecting dropped packets
+        int outOfSequenceCount = 0;
+
+        AudioSource audioSource;
+        AudioClip audioClip;
+
+        long absoluteWritePosition = 0;      // absolute offset into the incoming audio stream
+
+        int previousTimeSamples = 0;         // we use this to determine when we've looped
+        int playbackLoops = 0;               // number of times we've looped (we use this to compute absolute read position)
+
+        // CONSIDER... registering for when avatar changes, and replacing our audioclip with one on the avatar
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            udpClient = new UdpClient(basePort + (ushort)OwnerClientId);
+            audioSource = GetComponent<AudioSource>();
+            int clipSize = 44100 * 2 * 3;  // 44.1 khz, times 2 channels, times number of seconds to buffer
+            audioClip = AudioClip.Create("Received", clipSize, 2, 44100, false);
+            audioSource.clip = audioClip;
+            audioSource.loop = true;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            udpClient.Close();
+        }
+
+        UInt16 Read16(byte[] buffer, int offset) => (UInt16)((buffer[offset] << 8) | buffer[offset + 1]);
+
+        void FixedUpdate()
+        {
+            if (udpClient == null) return;
+            while (udpClient.Available > 0)
+            {
+                byte[] packet = udpClient.Receive(ref RemoteIpEndPoint);
+                if ((packet[1] & 0x7F) != 10) return; // bad payload type
+                UInt16 seq = Read16(packet, 2);
+                if ((seq & TOP_BIT_16) == 0 && (lastSequenceNumber & TOP_BIT_16) != 0) lastSequenceNumber = seq; // wrap-around
+                if (seq < lastSequenceNumber)
+                {
+                    if (++outOfSequenceCount > 5)
+                    {
+                        lastSequenceNumber = seq;
+                        outOfSequenceCount = 0;
+                    }
+                    return;
+                }
+                else outOfSequenceCount = 0;
+                lastSequenceNumber = seq;
+                ProcessAudio(packet);
+            }
+            CheckIfOutOfData();
+        }
+
+        void ProcessAudio(byte[] packet)
+        {
+            // convert the incoming audio into an array of floating point values (range -1 to +1)
+            float[] audioBuffer = new float[(packet.Length - RTP_HEADER_LEN) / sizeof(Int16)];
+            int audioBufferIndex = 0;
+            for (int packetIndex = RTP_HEADER_LEN; packetIndex < packet.Length; packetIndex += sizeof(Int16))
+                audioBuffer[audioBufferIndex++] = unchecked((Int16)Read16(packet, packetIndex)) / (float)Int16.MaxValue;
+
+            // write the data into the audio clip
+            audioClip.SetData(audioBuffer, (int)(absoluteWritePosition % audioClip.samples));
+            absoluteWritePosition += audioBuffer.Length / 2;  // each sample is two channels
+        }
+
+        void CheckIfOutOfData()
+        {
+            if (audioSource.timeSamples < previousTimeSamples) ++playbackLoops;  // wrapped around the clip's internal buffer
+            previousTimeSamples = audioSource.timeSamples;
+
+            long absoluteReadPosition = playbackLoops * audioClip.samples + audioSource.timeSamples;
+
+            if (audioSource.isPlaying && absoluteReadPosition >= absoluteWritePosition) audioSource.Stop();
+            else if (!audioSource.isPlaying && (absoluteWritePosition - absoluteReadPosition) > startThreshold) audioSource.Play();
+        }
+    }
+}
