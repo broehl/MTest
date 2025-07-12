@@ -30,7 +30,6 @@ namespace ConestogaMultiplayer
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (!enabled) return;
             if (avatarPrefabs.Length == 0) return;
             networkedPlayerHeight.OnValueChanged += UpdatePlayerHeight;
             networkedAvatarNumber.OnValueChanged += UpdateAvatarNumber;
@@ -42,6 +41,7 @@ namespace ConestogaMultiplayer
 
         private void UpdateAvatarNumber(int previousValue, int newValue)
         {
+            print($"On {name}, setting avatar value to {newValue}");
             playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
         }
 
