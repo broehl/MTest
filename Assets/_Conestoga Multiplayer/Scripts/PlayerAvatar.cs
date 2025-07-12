@@ -33,18 +33,14 @@ namespace ConestogaMultiplayer
             if (avatarPrefabs.Length == 0) return;
             networkedPlayerHeight.OnValueChanged += UpdatePlayerHeight;
             networkedAvatarNumber.OnValueChanged += UpdateAvatarNumber;
-            if (IsOwner)
-            {
-                networkedAvatarNumber.Value = ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
-                UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
-            }
-            //else UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
+            if (IsOwner) networkedAvatarNumber.Value = ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
+            UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
             if (IsOwner) SetPlayerHeight();
         }
 
         private void UpdateAvatarNumber(int previousValue, int newValue)
         {
-            print($"UpdatedAvatarNumber called, owner = {IsOwner}");
+            print($"UpdateAvatarNumber called, owner = {IsOwner}");
             if (playerAvatar) Destroy(playerAvatar);
             playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
             ResizeAvatar();
