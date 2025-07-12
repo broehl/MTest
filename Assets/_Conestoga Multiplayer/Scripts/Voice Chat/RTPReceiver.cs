@@ -15,8 +15,8 @@ namespace ConestogaMultiplayer
         [SerializeField] int basePort = 6000;
         [SerializeField] float startThreshold = 4000;  // number of samples to accumulate before starting
 
-        UdpClient udpClient = new UdpClient();
-        IPEndPoint RemoteIpEndPoint;
+        UdpClient udpClient;
+        IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
         const int RTP_HEADER_LEN = 12;
         const UInt16 TOP_BIT_16 = 1 << 15;   // we check the top bit to determine when the sequence number has wrapped around
@@ -37,9 +37,8 @@ namespace ConestogaMultiplayer
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            udpClient.EnableBroadcast = true;
             int myReceivePort = basePort + (ushort)OwnerClientId;
-            RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, myReceivePort);
+            udpClient = new UdpClient(myReceivePort);
             print($"Receiving audio on port {myReceivePort}");
             audioSource = GetComponent<AudioSource>();
             int clipSize = 44100 * 2 * 3;  // 44.1 khz, times 2 channels, times number of seconds to buffer
@@ -62,9 +61,8 @@ namespace ConestogaMultiplayer
             while (udpClient.Available > 0)
             {
                 byte[] packet = udpClient.Receive(ref RemoteIpEndPoint);
-                if ((packet[1] & 0x7F) != 10) return; // bad payload type
+                if ((packet[1] & 0x7F) != 11) return; // bad payload type
                 UInt16 seq = Read16(packet, 2);
-                print(seq);
                 if ((seq & TOP_BIT_16) == 0 && (lastSequenceNumber & TOP_BIT_16) != 0) lastSequenceNumber = seq; // wrap-around
                 if (seq < lastSequenceNumber)
                 {
