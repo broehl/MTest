@@ -33,14 +33,13 @@ namespace ConestogaMultiplayer
             if (avatarPrefabs.Length == 0) return;
             networkedPlayerHeight.OnValueChanged += UpdatePlayerHeight;
             networkedAvatarNumber.OnValueChanged += UpdateAvatarNumber;
+            if (IsOwner) SetPlayerHeight();
             if (IsOwner) networkedAvatarNumber.Value = ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
             else UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
-            if (IsOwner) SetPlayerHeight();
            }
 
         private void UpdateAvatarNumber(int previousValue, int newValue)
         {
-            print($"On {name}, setting avatar value to {newValue}");
             playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
             ResizeAvatar();
         }
@@ -67,7 +66,11 @@ namespace ConestogaMultiplayer
 
         void UpdatePlayerHeight(float oldheight, float newheight) => ResizeAvatar();
 
-        void ResizeAvatar() => playerAvatar.transform.localScale = (networkedPlayerHeight.Value / avatarHeight) * Vector3.one;
+        void ResizeAvatar()
+        {
+            print($"In ResizeAvatar(), playerAvatar is {playerAvatar}, networked height is {networkedPlayerHeight?.Value}");
+            playerAvatar.transform.localScale = (networkedPlayerHeight.Value / avatarHeight) * Vector3.one;
+        }
 
         void LateUpdate()
         {
