@@ -45,7 +45,12 @@ namespace ConestogaMultiplayer
             else Debug.LogError("RTP Receiver couldn't find an AudioSource");
             //GetComponent<PlayerAvatar>()?.playerAvatarChangedEvent.AddListener(PlayerAvatarChanged);
         }
-
+        public override void OnNetworkDespawn()
+        {
+            base.OnNetworkDespawn();
+            udpClient.Close();
+        }
+   
         private void PlayerAvatarChanged(GameObject avatar)
         {
             audioSource = avatar.GetComponent<AvatarReferences>()?.mouthAudio;
@@ -61,12 +66,7 @@ namespace ConestogaMultiplayer
             //audioSource.spatialize = true;
             //audioSource.spatialBlend = 1;
             previousTimeSamples = playbackLoops = 0;
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            base.OnNetworkDespawn();
-            udpClient.Close();
+            audioSource.Play();
         }
 
         UInt16 Read16(byte[] buffer, int offset) => (UInt16)((buffer[offset] << 8) | buffer[offset + 1]);
@@ -103,7 +103,7 @@ namespace ConestogaMultiplayer
             int audioBufferIndex = 0;
             for (int packetIndex = RTP_HEADER_LEN; packetIndex < packet.Length; packetIndex += sizeof(Int16))
                 audioBuffer[audioBufferIndex++] = unchecked((Int16)Read16(packet, packetIndex)) / (float)Int16.MaxValue;
-
+ 
             // write the data into the audio clip
             audioClip.SetData(audioBuffer, (int)(absoluteWritePosition % audioClip.samples));
             absoluteWritePosition += audioBuffer.Length / 2;  // each sample is two channels
@@ -111,6 +111,7 @@ namespace ConestogaMultiplayer
 
         void CheckIfOutOfData()
         {
+            return;
             if (audioSource == null) return;
             if (audioSource.timeSamples < previousTimeSamples) ++playbackLoops;  // wrapped around the clip's internal buffer
             previousTimeSamples = audioSource.timeSamples;
