@@ -48,9 +48,10 @@ namespace ConestogaMultiplayer
 
         private void PlayerAvatarChanged(GameObject avatar)
         {
-            audioSource = avatar.GetComponent<AvatarReferences>().mouthAudio;
+            audioSource = avatar.GetComponent<AvatarReferences>()?.mouthAudio;
             if (audioSource == null) audioSource = avatar.GetComponentInChildren<AudioSource>();
             if (audioSource) SetupAudioSource(audioSource);
+            else Debug.Log("No audio source");
         }
 
         void SetupAudioSource(AudioSource audioSource)
