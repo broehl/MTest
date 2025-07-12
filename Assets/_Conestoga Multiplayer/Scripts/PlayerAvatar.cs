@@ -60,7 +60,7 @@ namespace ConestogaMultiplayer
             GameObject avatarRoot = Instantiate(avatarPrefab);
             refs = avatarRoot.GetComponent<AvatarReferences>();
             avatarHeight = refs.headBone.position.y;
-            if (IsOwner && behead) avatarRoot.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).localScale = Vector3.zero;
+            if (IsOwner && behead) refs.headBone.localScale = Vector3.zero;
             playerAvatarChangedEvent.Invoke(playerAvatar);
             return avatarRoot;
         }
