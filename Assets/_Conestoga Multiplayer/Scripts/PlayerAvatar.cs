@@ -40,6 +40,7 @@ namespace ConestogaMultiplayer
 
         private void UpdateAvatarNumber(int previousValue, int newValue)
         {
+            print($"UpdatedAvatarNumber called, owner = {IsOwner}");
             playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
             ResizeAvatar();
         }
@@ -68,7 +69,7 @@ namespace ConestogaMultiplayer
 
         void ResizeAvatar()
         {
-            print($"In ResizeAvatar(), playerAvatar is {playerAvatar}, networked height is {networkedPlayerHeight?.Value}");
+            print($"In ResizeAvatar(), isOwner = {IsOwner} playerAvatar is {playerAvatar}, networked height is {networkedPlayerHeight?.Value}");
             playerAvatar.transform.localScale = (networkedPlayerHeight.Value / avatarHeight) * Vector3.one;
         }
 
