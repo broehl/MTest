@@ -35,6 +35,7 @@ namespace ConestogaMultiplayer
         {
             base.OnNetworkSpawn();
             if (!IsOwner) return;
+            udpClient.EnableBroadcast = true;
             int myBroadcastPort = basePort + (ushort)NetworkManager.Singleton.LocalClientId;
             print($"Broadcasting audio on port {myBroadcastPort}");
             remoteEndPoint = new IPEndPoint(IPAddress.Broadcast, myBroadcastPort);
