@@ -39,12 +39,6 @@ namespace ConestogaMultiplayer
             UpdatePlayerHeight(-1, networkedPlayerHeight.Value);
         }
 
-        private void UpdateAvatarNumber(int previousValue, int newValue)
-        {
-            if (playerAvatar) Destroy(playerAvatar);
-            playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
-        }
-
         public override void OnNetworkDespawn()
         {
             base.OnNetworkDespawn();
@@ -53,7 +47,13 @@ namespace ConestogaMultiplayer
             Destroy(playerAvatar);
         }
 
-        private GameObject LoadAvatar(GameObject avatarPrefab)
+        void UpdateAvatarNumber(int previousValue, int newValue)
+        {
+            if (playerAvatar) Destroy(playerAvatar);
+            playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
+        }
+
+        GameObject LoadAvatar(GameObject avatarPrefab)
         {
             GameObject avatarRoot = Instantiate(avatarPrefab);
             refs = avatarRoot.GetComponent<AvatarReferences>();
@@ -63,7 +63,12 @@ namespace ConestogaMultiplayer
             return avatarRoot;
         }
 
-        void SetPlayerHeight() => networkedPlayerHeight.Value = TrackerReferences.instance.headTracker.position.y;
+        void SetPlayerHeight()
+        {
+            if (TrackerReferences.instance?.headTracker?.position.y <= 0) return;
+            networkedPlayerHeight.Value = TrackerReferences.instance.headTracker.position.y;
+            print($"Set player height to {TrackerReferences.instance.headTracker.position.y}");
+        }
 
         void UpdatePlayerHeight(float oldheight, float newheight) => ResizeAvatar();
 
