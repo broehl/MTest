@@ -2778,6 +2778,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR Interaction Setup
       objectReference: {fileID: 0}
+    - target: {fileID: 7690080512698956844, guid: 895f6f3c2d334633b5800312285058d2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7696548424635294051, guid: 895f6f3c2d334633b5800312285058d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2842,7 +2847,7 @@ Transform:
   m_GameObject: {fileID: 1858506656}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.092, y: 0, z: 0.123}
+  m_LocalPosition: {x: -1.5, y: 0, z: 0.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3143,7 +3148,7 @@ Transform:
   m_GameObject: {fileID: 2128212856}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2.32, y: 0, z: -0.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

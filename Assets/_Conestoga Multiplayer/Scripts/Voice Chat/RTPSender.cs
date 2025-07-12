@@ -25,8 +25,8 @@ namespace ConestogaMultiplayer
         UInt16 sequenceNumber = 0;
         UInt32 timestamp = 0;
 
-        UdpClient udpClient;
-        int myBroadcastPort;
+        UdpClient udpClient = new UdpClient();
+        IPEndPoint remoteEndPoint;
 
         const int RTP_HEADER_LEN = 12;
         const int MAX_DATA_PER_PACKET = 1400;   // ethernet MTU is 1500, but we need to allow for headers (UDP=8 bytes, IP=40 bytes or more)
@@ -35,16 +35,17 @@ namespace ConestogaMultiplayer
         {
             base.OnNetworkSpawn();
             if (!IsOwner) return;
-            myBroadcastPort = basePort + (ushort)NetworkManager.Singleton.LocalClientId;
+            int myBroadcastPort = basePort + (ushort)NetworkManager.Singleton.LocalClientId;
             print($"Broadcasting audio on port {myBroadcastPort}");
+            remoteEndPoint = new IPEndPoint(IPAddress.Broadcast, myBroadcastPort);
             audioClip = Microphone.Start(microphoneDevice, true, 1, 44100);  // needs to be 44100 for RTP payload type 11
             if (audioClip == null)
             {
                 Debug.Log("Failed to open specified mic, using default audio input");
-                audioClip = Microphone.Start(null, true, 3, 44100);
-                if (audioClip == null) Debug.Log("Failed to open audio input");
                 Debug.Log("Available audio devices are:");
                 foreach (string devname in Microphone.devices) Debug.Log($"  {devname}");
+                audioClip = Microphone.Start(null, true, 3, 44100);
+                if (audioClip == null) Debug.Log("Failed to open audio input");
             }
             if (audioClip) sending = true;
         }
@@ -92,8 +93,7 @@ namespace ConestogaMultiplayer
                 Write16(packetBuffer, 8, 0);    // SSRC
                 Write16(packetBuffer, 10, 0);   // SSRC
                 Array.Copy(audioBuffer, offset, packetBuffer, RTP_HEADER_LEN, bodyLen);
-                int dataSent = udpClient.Send(packetBuffer, packetBuffer.Length, "255.255.255.255", myBroadcastPort);
-                //int dataSent = udpSocket.SendTo(packetBuffer, 0, packetBuffer.Length, SocketFlags.None, remoteEndPoint);
+                int dataSent = udpClient.Send(packetBuffer, packetBuffer.Length, remoteEndPoint);
                 dataLeftToSend -= dataSent;
                 offset += dataSent;
             }
@@ -109,7 +109,8 @@ namespace ConestogaMultiplayer
 
         public void FixedUpdate()
         {
-            if (!sending || audioClip == null) return;
+            if (!sending) return;
+            // pull data from the microphone's audioclip and send it
             int pos = Microphone.GetPosition(microphoneDevice);
             if (pos <= 0) return;
             if (lastpos > pos) lastpos = 0;  // wrap-around
