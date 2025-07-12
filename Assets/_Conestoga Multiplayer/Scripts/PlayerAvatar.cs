@@ -36,6 +36,7 @@ namespace ConestogaMultiplayer
             if (IsOwner) networkedAvatarNumber.Value = ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
             UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
             if (IsOwner) SetPlayerHeight();
+            else ResizeAvatar();
         }
 
         private void UpdateAvatarNumber(int previousValue, int newValue)
@@ -59,7 +60,7 @@ namespace ConestogaMultiplayer
             GameObject avatarRoot = Instantiate(avatarPrefab);
             refs = avatarRoot.GetComponent<AvatarReferences>();
             avatarHeight = refs.headBone.position.y;
-            if (IsOwner && behead) refs.headBone.localScale = Vector3.zero;
+            if (IsOwner && behead) avatarRoot.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).localScale = Vector3.zero;
             playerAvatarChangedEvent.Invoke(playerAvatar);
             return avatarRoot;
         }
