@@ -43,7 +43,7 @@ namespace ConestogaMultiplayer
             if (audioSource == null) audioSource = GetComponentInChildren<AudioSource>();
             if (audioSource) SetupAudioSource(audioSource);
             else Debug.LogError("RTP Receiver couldn't find an AudioSource");
-            GetComponent<PlayerAvatar>()?.playerAvatarChangedEvent.AddListener(PlayerAvatarChanged);
+            //GetComponent<PlayerAvatar>()?.playerAvatarChangedEvent.AddListener(PlayerAvatarChanged);
         }
 
         private void PlayerAvatarChanged(GameObject avatar)
