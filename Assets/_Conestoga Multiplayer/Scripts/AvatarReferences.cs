@@ -10,5 +10,6 @@ namespace ConestogaMultiplayer
     {
         public Transform headIK_target, leftArmIK_target, rightArmIK_target;
         public Transform headBone;
+        public AudioSource mouthAudio;
     }
 }
