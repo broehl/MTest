@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8594064441157784386}
   - component: {fileID: 6428376700625056253}
   - component: {fileID: 3319223329512536646}
+  - component: {fileID: 1319199529638606173}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -51,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2987177203
+  GlobalObjectIdHash: 2093413972
   InScenePlacedSourceGlobalObjectIdHash: 2987177203
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -128,6 +129,21 @@ MonoBehaviour:
   basePort: 6000
   microphoneDevice: Headset Microphone (Oculus Virtual Audio Device)
   gain: 1
+--- !u!114 &1319199529638606173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164963217232280982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4acc1361229d6804eb699e63d09162c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basePort: 6000
+  startThreshold: 4000
+  audioSource: {fileID: 0}
 --- !u!1 &1562915096743750390
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,7 +493,6 @@ GameObject:
   - component: {fileID: 4718663434094494185}
   - component: {fileID: 6526634599438715461}
   - component: {fileID: 4205474808110774816}
-  - component: {fileID: 1061053405351019432}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -699,20 +714,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1061053405351019432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6050246433759221658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4acc1361229d6804eb699e63d09162c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  basePort: 6000
-  startThreshold: 4000
 --- !u!1 &7701133780003388979
 GameObject:
   m_ObjectHideFlags: 0

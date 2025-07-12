@@ -14,6 +14,7 @@ namespace ConestogaMultiplayer
     {
         [SerializeField] int basePort = 6000;
         [SerializeField] float startThreshold = 4000;  // number of samples to accumulate before starting
+        [SerializeField] AudioSource audioSource;
 
         UdpClient udpClient;
         IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -24,7 +25,6 @@ namespace ConestogaMultiplayer
         UInt16 lastSequenceNumber = 0;       // we use this for detecting dropped packets
         int outOfSequenceCount = 0;
 
-        AudioSource audioSource;
         AudioClip audioClip;
 
         long absoluteWritePosition = 0;      // absolute offset into the incoming audio stream
@@ -32,19 +32,34 @@ namespace ConestogaMultiplayer
         int previousTimeSamples = 0;         // we use this to determine when we've looped
         int playbackLoops = 0;               // number of times we've looped (we use this to compute absolute read position)
 
-        // CONSIDER... registering for when avatar changes, and replacing our audioclip with one on the avatar
-
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
             int myReceivePort = basePort + (ushort)OwnerClientId;
             udpClient = new UdpClient(myReceivePort);
             print($"Receiving audio on port {myReceivePort}");
-            audioSource = GetComponent<AudioSource>();
             int clipSize = 44100 * 2 * 3;  // 44.1 khz, times 2 channels, times number of seconds to buffer
             audioClip = AudioClip.Create("Received", clipSize, 2, 44100, false);
+            if (audioSource == null) audioSource = GetComponentInChildren<AudioSource>();
+            if (audioSource) SetupAudioSource(audioSource);
+            else Debug.LogError("RTP Receiver couldn't find an AudioSource");
+            GetComponent<PlayerAvatar>()?.playerAvatarChangedEvent.AddListener(PlayerAvatarChanged);
+        }
+
+        private void PlayerAvatarChanged(GameObject avatar)
+        {
+            audioSource = avatar.GetComponent<AvatarReferences>().mouthAudio;
+            if (audioSource == null) audioSource = avatar.GetComponentInChildren<AudioSource>();
+            if (audioSource) SetupAudioSource(audioSource);
+        }
+
+        void SetupAudioSource(AudioSource audioSource)
+        {
             audioSource.clip = audioClip;
             audioSource.loop = true;
+            audioSource.spatialize = true;
+            audioSource.spatialBlend = 1;
+            previousTimeSamples = playbackLoops = 0;
         }
 
         public override void OnNetworkDespawn()
@@ -95,6 +110,7 @@ namespace ConestogaMultiplayer
 
         void CheckIfOutOfData()
         {
+            if (audioSource == null) return;
             if (audioSource.timeSamples < previousTimeSamples) ++playbackLoops;  // wrapped around the clip's internal buffer
             previousTimeSamples = audioSource.timeSamples;
 
