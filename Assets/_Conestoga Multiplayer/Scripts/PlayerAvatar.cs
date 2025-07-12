@@ -19,7 +19,7 @@ namespace ConestogaMultiplayer
         public GameObject playerAvatar { get; private set; }
         [HideInInspector] public UnityEvent<GameObject> playerAvatarChangedEvent = new UnityEvent<GameObject>();
 
-        AvatarReferences refs;
+        AvatarReferences refs;  // references to the various parts of the avatar (head, hands, etc)
 
         // these variables are used to scale the avatar to match the player
         NetworkVariable<float> networkedPlayerHeight = new NetworkVariable<float>(1.6f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
@@ -43,7 +43,6 @@ namespace ConestogaMultiplayer
         {
             if (playerAvatar) Destroy(playerAvatar);
             playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
-            ResizeAvatar();
         }
 
         public override void OnNetworkDespawn()
