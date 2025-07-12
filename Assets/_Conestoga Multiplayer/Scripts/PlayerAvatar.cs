@@ -22,7 +22,7 @@ namespace ConestogaMultiplayer
         AvatarReferences refs;
 
         // these variables are used to scale the avatar to match the player
-        NetworkVariable<float> networkedPlayerHeight = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        NetworkVariable<float> networkedPlayerHeight = new NetworkVariable<float>(1.6f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         float avatarHeight;  // this gets set when the avatar is first loaded
 
         NetworkVariable<int> networkedAvatarNumber = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
