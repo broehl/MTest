@@ -35,8 +35,8 @@ namespace ConestogaMultiplayer
             networkedAvatarNumber.OnValueChanged += UpdateAvatarNumber;
             if (IsOwner) networkedAvatarNumber.Value = ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
             UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
-            if (IsOwner) SetPlayerHeight();
-            UpdatePlayerHeight(-1, networkedPlayerHeight.Value);
+            //if (IsOwner) SetPlayerHeight();
+            //UpdatePlayerHeight(-1, networkedPlayerHeight.Value);
         }
 
         private void UpdateAvatarNumber(int previousValue, int newValue)
