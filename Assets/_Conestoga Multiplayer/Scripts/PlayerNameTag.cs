@@ -16,9 +16,9 @@ namespace ConestogaMultiplayer
         private Transform cameraTransform;
         private Transform nameTagTransform;
 
-        NetworkVariable<FixedString32Bytes> networkedNameTag = new NetworkVariable<FixedString32Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner)
+        NetworkVariable<FixedString32Bytes> networkedNameTag = new NetworkVariable<FixedString32Bytes>("", NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
- ;       private void Awake()
+        private void Awake()
         {
             cameraTransform = Camera.main.transform;
             nameTagTransform = nameTagText.GetComponentInParent<Canvas>().transform;

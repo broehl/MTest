@@ -32,17 +32,15 @@ namespace ConestogaMultiplayer
             base.OnNetworkSpawn();
             if (!enabled) return;
             if (avatarPrefabs.Length == 0) return;
-            networkedPlayerHeight.OnValueChanged += OnUpdatePlayerHeight;
-            networkedAvatarNumber.OnValueChanged += OnUpdateAvatarNumber;
-            if (IsOwner)
-            {
-                SetPlayerHeight();
-                networkedAvatarNumber.Value =  ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
-            }
+            networkedPlayerHeight.OnValueChanged += UpdatePlayerHeight;
+            networkedAvatarNumber.OnValueChanged += UpdateAvatarNumber;
+            if (IsOwner) networkedAvatarNumber.Value = ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
+            else UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
+            if (IsOwner) SetPlayerHeight();
             ResizeAvatar();
         }
 
-        private void OnUpdateAvatarNumber(int previousValue, int newValue)
+        private void UpdateAvatarNumber(int previousValue, int newValue)
         {
             playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
         }
@@ -51,7 +49,7 @@ namespace ConestogaMultiplayer
         {
             base.OnNetworkDespawn();
             if (!enabled) return;
-            networkedPlayerHeight.OnValueChanged -= OnUpdatePlayerHeight;
+            networkedPlayerHeight.OnValueChanged -= UpdatePlayerHeight;
             Destroy(playerAvatar);
         }
 
@@ -67,7 +65,7 @@ namespace ConestogaMultiplayer
 
         void SetPlayerHeight() => networkedPlayerHeight.Value = TrackerReferences.instance.headTracker.position.y;
 
-        void OnUpdatePlayerHeight(float oldheight, float newheight) => ResizeAvatar();
+        void UpdatePlayerHeight(float oldheight, float newheight) => ResizeAvatar();
 
         void ResizeAvatar() => playerAvatar.transform.localScale = (networkedPlayerHeight.Value / avatarHeight) * Vector3.one;
 
