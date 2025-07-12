@@ -27,19 +27,16 @@ namespace ConestogaMultiplayer
 
         NetworkVariable<int> networkedAvatarNumber = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-        private void Awake()
-        {
-            networkedPlayerHeight.OnValueChanged += UpdatePlayerHeight;
-            networkedAvatarNumber.OnValueChanged += UpdateAvatarNumber;
-        }
-
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+            networkedPlayerHeight.OnValueChanged += UpdatePlayerHeight;
+            networkedAvatarNumber.OnValueChanged += UpdateAvatarNumber;
             if (avatarPrefabs.Length == 0) return;  // no avatars!
             if (IsOwner) networkedAvatarNumber.Value = ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
-            else UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
+            UpdateAvatarNumber(-1, networkedAvatarNumber.Value);
             if (IsOwner) SetPlayerHeight();
+            UpdatePlayerHeight(-1, networkedPlayerHeight.Value);
         }
 
         private void UpdateAvatarNumber(int previousValue, int newValue)
