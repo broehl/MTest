@@ -58,8 +58,8 @@ namespace ConestogaMultiplayer
         {
             audioSource.clip = audioClip;
             audioSource.loop = true;
-            audioSource.spatialize = true;
-            audioSource.spatialBlend = 1;
+            //audioSource.spatialize = true;
+            //audioSource.spatialBlend = 1;
             previousTimeSamples = playbackLoops = 0;
         }
 
