@@ -2,6 +2,7 @@
 
 // Written by Bernie Roehl, June 2025
 
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,15 +25,26 @@ namespace ConestogaMultiplayer
         NetworkVariable<float> networkedPlayerHeight = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         float avatarHeight;  // this gets set when the avatar is first loaded
 
+        NetworkVariable<int> networkedAvatarNumber = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
             if (!enabled) return;
             if (avatarPrefabs.Length == 0) return;
-            playerAvatar = LoadAvatar(avatarPrefabs[((int)OwnerClientId) % avatarPrefabs.Length]);
             networkedPlayerHeight.OnValueChanged += OnUpdatePlayerHeight;
-            if (IsOwner) SetPlayerHeight();
+            networkedAvatarNumber.OnValueChanged += OnUpdateAvatarNumber;
+            if (IsOwner)
+            {
+                SetPlayerHeight();
+                networkedAvatarNumber.Value =  ((int)NetworkManager.Singleton.LocalClientId) % avatarPrefabs.Length;
+            }
             ResizeAvatar();
+        }
+
+        private void OnUpdateAvatarNumber(int previousValue, int newValue)
+        {
+            playerAvatar = LoadAvatar(avatarPrefabs[newValue]);
         }
 
         public override void OnNetworkDespawn()
