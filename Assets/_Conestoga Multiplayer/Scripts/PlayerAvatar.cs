@@ -65,9 +65,8 @@ namespace ConestogaMultiplayer
 
         void SetPlayerHeight()
         {
-            if (TrackerReferences.instance?.headTracker?.position.y <= 0) return;
-            networkedPlayerHeight.Value = TrackerReferences.instance.headTracker.position.y;
-            print($"Set player height to {TrackerReferences.instance.headTracker.position.y}");
+            if (TrackerReferences.instance?.headTracker?.position.y > 0)
+                networkedPlayerHeight.Value = TrackerReferences.instance.headTracker.position.y;
         }
 
         void UpdatePlayerHeight(float oldheight, float newheight) => ResizeAvatar();
