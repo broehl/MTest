@@ -38,8 +38,8 @@ namespace ConestogaMultiplayer
             int myReceivePort = basePort + (ushort)OwnerClientId;
             udpClient = new UdpClient(myReceivePort);
             print($"Receiving audio on port {myReceivePort}");
-            int clipSize = 44100 * 2 * 3;  // 44.1 khz, times 2 channels, times number of seconds to buffer
-            audioClip = AudioClip.Create("Received", clipSize, 2, 44100, false);
+            int clipSize = 44100 * 3;  // 44.1 khz times number of seconds to buffer
+            audioClip = AudioClip.Create("Received", clipSize, 1, 44100, false);
             if (audioSource == null) audioSource = GetComponentInChildren<AudioSource>();
             if (audioSource) SetupAudioSource(audioSource);
             else Debug.LogError("RTP Receiver couldn't find an AudioSource");
@@ -63,8 +63,8 @@ namespace ConestogaMultiplayer
         {
             audioSource.clip = audioClip;
             audioSource.loop = true;
-            //audioSource.spatialize = true;
-            //audioSource.spatialBlend = 1;
+            audioSource.spatialize = true;
+            audioSource.spatialBlend = 1;
             previousTimeSamples = playbackLoops = 0;
             audioSource.Play();
         }
@@ -106,18 +106,17 @@ namespace ConestogaMultiplayer
  
             // write the data into the audio clip
             audioClip.SetData(audioBuffer, (int)(absoluteWritePosition % audioClip.samples));
-            absoluteWritePosition += audioBuffer.Length / 2;  // each sample is two channels
+            absoluteWritePosition += audioBuffer.Length;
         }
 
         void CheckIfOutOfData()
         {
-            return;
             if (audioSource == null) return;
             if (audioSource.timeSamples < previousTimeSamples) ++playbackLoops;  // wrapped around the clip's internal buffer
             previousTimeSamples = audioSource.timeSamples;
 
             long absoluteReadPosition = playbackLoops * audioClip.samples + audioSource.timeSamples;
-
+            //print($"rp = {absoluteReadPosition}, wp = {absoluteWritePosition}");
             if (audioSource.isPlaying && absoluteReadPosition >= absoluteWritePosition) audioSource.Stop();
             else if (!audioSource.isPlaying && (absoluteWritePosition - absoluteReadPosition) > startThreshold) audioSource.Play();
         }

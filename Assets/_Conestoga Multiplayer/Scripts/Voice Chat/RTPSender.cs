@@ -6,7 +6,6 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using Unity.Netcode;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace ConestogaMultiplayer
@@ -15,7 +14,6 @@ namespace ConestogaMultiplayer
     {
         [SerializeField] int basePort = 6000;  // this value + our network id is the port we use
         [SerializeField] string microphoneDevice = "Headset Microphone (Oculus Virtual Audio Device)";
-        [SerializeField] float gain = 1.0f;
 
         AudioClip audioClip;         // this is where the microphone data is stored
         int lastpos = 0;             // last buffer position we read audio data from
@@ -75,7 +73,7 @@ namespace ConestogaMultiplayer
             int bufferIndex = 0;
             for (int sampleIndex = 0; sampleIndex < samples.Length; ++sampleIndex)
             {
-                Int16 sample = (Int16)(Mathf.Clamp(gain * samples[sampleIndex], -1f, 1f) * Int16.MaxValue);
+                Int16 sample = (Int16)(samples[sampleIndex] * Int16.MaxValue);
                 Write16(audioBuffer, bufferIndex, unchecked((UInt16)sample));
                 bufferIndex += sizeof(Int16);
             }
