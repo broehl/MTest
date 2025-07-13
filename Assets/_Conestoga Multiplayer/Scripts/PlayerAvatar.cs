@@ -17,7 +17,7 @@ namespace ConestogaMultiplayer
         [SerializeField] float bodyAlignmentRate = 0.01f;
 
         public GameObject playerAvatar { get; private set; }
-        [HideInInspector] public UnityEvent<GameObject> playerAvatarChangedEvent = new UnityEvent<GameObject>();
+        public UnityEvent<GameObject> playerAvatarChangedEvent = new UnityEvent<GameObject>();
 
         AvatarReferences refs;  // references to the various parts of the avatar (head, hands, etc)
 
@@ -57,10 +57,11 @@ namespace ConestogaMultiplayer
         GameObject LoadAvatar(GameObject avatarPrefab)
         {
             GameObject avatarRoot = Instantiate(avatarPrefab);
+            avatarRoot.name = $"{name}:{avatarRoot.name}";
             refs = avatarRoot.GetComponent<AvatarReferences>();
             avatarHeight = refs.headBone.position.y;
             if (IsOwner && behead) refs.headBone.localScale = Vector3.zero;
-            playerAvatarChangedEvent.Invoke(playerAvatar);
+            playerAvatarChangedEvent.Invoke(avatarRoot);
             return avatarRoot;
         }
 

@@ -32,6 +32,11 @@ namespace ConestogaMultiplayer
         int previousTimeSamples = 0;         // we use this to determine when we've looped
         int playbackLoops = 0;               // number of times we've looped (we use this to compute absolute read position)
 
+        private void Awake()
+        {
+            GetComponent<PlayerAvatar>().playerAvatarChangedEvent.AddListener(PlayerAvatarChanged);
+        }
+   
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -43,7 +48,6 @@ namespace ConestogaMultiplayer
             if (audioSource == null) audioSource = GetComponentInChildren<AudioSource>();
             if (audioSource) SetupAudioSource(audioSource);
             else Debug.LogError("RTP Receiver couldn't find an AudioSource");
-            //GetComponent<PlayerAvatar>()?.playerAvatarChangedEvent.AddListener(PlayerAvatarChanged);
         }
         public override void OnNetworkDespawn()
         {
@@ -51,9 +55,11 @@ namespace ConestogaMultiplayer
             udpClient.Close();
         }
    
-        private void PlayerAvatarChanged(GameObject avatar)
+        public void PlayerAvatarChanged(GameObject avatar)
         {
+            print($"AVATAR CHANGED TO {avatar.name}");
             audioSource = avatar.GetComponent<AvatarReferences>()?.mouthAudio;
+            print($"mouth is {audioSource}");
             if (audioSource == null) audioSource = avatar.GetComponentInChildren<AudioSource>();
             if (audioSource) SetupAudioSource(audioSource);
             else Debug.Log("No audio source");
@@ -61,6 +67,7 @@ namespace ConestogaMultiplayer
 
         void SetupAudioSource(AudioSource audioSource)
         {
+            print($"SETTING UP AUDIOSOURCE {audioSource} child of {audioSource.transform.parent.name}");
             audioSource.clip = audioClip;
             audioSource.loop = true;
             audioSource.spatialize = true;
