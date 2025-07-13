@@ -44,7 +44,8 @@ namespace ConestogaMultiplayer
             base.OnNetworkDespawn();
             if (!enabled) return;
             networkedPlayerHeight.OnValueChanged -= UpdatePlayerHeight;
-            Destroy(playerAvatar);
+            networkedAvatarNumber.OnValueChanged -= UpdateAvatarNumber;
+            if (playerAvatar) Destroy(playerAvatar);
         }
 
         void UpdateAvatarNumber(int previousValue, int newValue)
