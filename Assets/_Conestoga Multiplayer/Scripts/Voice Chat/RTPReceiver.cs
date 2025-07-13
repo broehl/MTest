@@ -13,8 +13,10 @@ namespace ConestogaMultiplayer
     public class RTPReceiver : NetworkBehaviour
     {
         [SerializeField] int basePort = 6000;
-        [SerializeField] float startThreshold = 4000;  // number of samples to accumulate before starting
-        [SerializeField] AudioSource audioSource;
+
+        AudioSource audioSource;
+
+        float startThreshold = 4000;  // number of samples to accumulate before starting
 
         UdpClient udpClient;
         IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -57,9 +59,7 @@ namespace ConestogaMultiplayer
    
         public void PlayerAvatarChanged(GameObject avatar)
         {
-            print($"AVATAR CHANGED TO {avatar.name}");
             audioSource = avatar.GetComponent<AvatarReferences>()?.mouthAudio;
-            print($"mouth is {audioSource}");
             if (audioSource == null) audioSource = avatar.GetComponentInChildren<AudioSource>();
             if (audioSource) SetupAudioSource(audioSource);
             else Debug.Log("No audio source");
@@ -67,7 +67,6 @@ namespace ConestogaMultiplayer
 
         void SetupAudioSource(AudioSource audioSource)
         {
-            print($"SETTING UP AUDIOSOURCE {audioSource} child of {audioSource.transform.parent.name}");
             audioSource.clip = audioClip;
             audioSource.loop = true;
             audioSource.spatialize = true;
@@ -123,7 +122,6 @@ namespace ConestogaMultiplayer
             previousTimeSamples = audioSource.timeSamples;
 
             long absoluteReadPosition = playbackLoops * audioClip.samples + audioSource.timeSamples;
-            //print($"rp = {absoluteReadPosition}, wp = {absoluteWritePosition}");
             if (audioSource.isPlaying && absoluteReadPosition >= absoluteWritePosition) audioSource.Stop();
             else if (!audioSource.isPlaying && (absoluteWritePosition - absoluteReadPosition) > startThreshold) audioSource.Play();
         }

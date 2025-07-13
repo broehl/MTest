@@ -13,7 +13,8 @@ namespace ConestogaMultiplayer
     public class RTPSender : NetworkBehaviour
     {
         [SerializeField] int basePort = 6000;  // this value + our network id is the port we use
-        [SerializeField] string microphoneDevice = "Headset Microphone (Oculus Virtual Audio Device)";
+
+        string microphoneDevice = "Headset Microphone (Oculus Virtual Audio Device)";
 
         AudioClip audioClip;         // this is where the microphone data is stored
         int lastpos = 0;             // last buffer position we read audio data from
